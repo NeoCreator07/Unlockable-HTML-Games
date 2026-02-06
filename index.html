@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Tab icon (favicon) -->
+<link rel="icon" type="image/x-icon" href="https://issaquah.instructure.com/favicon.ico">
+
+    <style>
+        :root{
+            --blue-700: #0456a6;
+            --blue-400: #5fb0ff;
+            --accent: #cfe9ff;
+            --bg: #ffffff;
+        }
+        html,body{height:100%;margin:0;padding:0;}
+        body{
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            background: linear-gradient(180deg,var(--accent) 0%, #f7fbff 40%, var(--bg) 100%);
+            color: var(--blue-700);
+            padding:2rem;
+            overflow-x: hidden;
+        }
+        .container{
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header{
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h1{
+            margin:0 0 0.5rem 0;
+            font-size: clamp(2rem, 6vw, 4rem);
+            line-height:1;
+            color: var(--blue-700);
+            letter-spacing: -0.02em;
+        }
+        p.lead{
+            margin:0 0 1.25rem 0;
+            color: #1464a8;
+            opacity:0.9;
+            font-size:1.05rem;
+        }
+        .badge{
+            display:inline-block;
+            background: linear-gradient(90deg,var(--blue-400),var(--blue-700));
+            color: #fff;
+            padding:0.35rem 0.75rem;
+            border-radius:999px;
+            font-weight:600;
+            font-size:0.85rem;
+            margin-bottom:1rem;
+            box-shadow: 0 6px 18px rgba(5,86,166,0.12);
+        }
+                .btn{
+            display:inline-block;
+            background: #fff;
+            color: var(--blue-700);
+            padding:1rem 3rem;
+            border-radius:10px;
+            font-weight:700;
+            font-size:1.2rem;
+            text-decoration:none;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            border:none;
+            cursor:pointer;
+        }
+        .btn:hover{
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+        }
+        .btn:active{
+            transform: translateY(0);
+        }
+        .instructions{
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .instructions h3{
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+        .instructions ol{
+            line-height: 1.8;
+            padding-left: 1.5rem;
+            margin: 0;
+        }
+        .instructions code{
+            background: rgba(255,255,255,0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .games-section h2{
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--blue-700);
+        }
+        .search-bar{
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .search-bar input{
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border: 2px solid var(--blue-400);
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .search-bar input:focus{
+            border-color: var(--blue-700);
+            box-shadow: 0 0 0 3px rgba(95,176,255,0.2);
+        }
+        .search-bar input::placeholder{
+            color: #1464a8;
+            opacity: 0.6;
+        }
+        .games-grid{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .game-card{
+            background: var(--bg);
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(4,86,166,0.08);
+            border: 1px solid rgba(5,86,166,0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .game-card:hover{
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(4,86,166,0.15);
+        }
+        .game-card h3{
+            margin: 0 0 0.75rem 0;
+            color: var(--blue-700);
+            font-size: 1.8rem;
+        }
+        .game-card p{
+            margin: 0 0 1.5rem 0;
+            color: #1464a8;
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+        .game-icon{
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg,var(--blue-400),var(--blue-700));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem auto;
+            box-shadow: 0 6px 20px rgba(5,86,166,0.2);
+        }
+        .btn-play{
+            background: linear-gradient(135deg,var(--blue-400),var(--blue-700));
+            color: #fff;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(5,86,166,0.2);
+        }
+        .btn-play:hover{
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(5,86,166,0.3);
+        }
+
+       
+        /* Like button */
+        .like-row{
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.25rem;
+        }
+        .like-button{
+            border:none;
+            border-radius:999px;
+            padding:0.25rem 0.7rem;
+            font-size:0.85rem;
+            cursor:pointer;
+            background:rgba(4,86,166,0.08);
+            color:var(--blue-700);
+            display:inline-flex;
+            align-items:center;
+            gap:0.25rem;
+        }
+        .like-button:hover{
+            background:rgba(4,86,166,0.18);
+        }
+        .like-button.liked{
+            background:rgba(4,86,166,0.3);
+            cursor:default;
+            opacity:0.8;
+        }
+        .like-count{
+            font-weight:600;
+            font-size:0.9rem;
+        }
+
+       olor:#cfefff;
+            }
+        }
+
+        .modal{
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+        .modal-content{
+            background: var(--bg);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s;
+        }
+        .modal-header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .modal-header h2{
+            margin: 0;
+            color: var(--blue-700);
+        }
+        .close-btn{
+            font-size: 2rem;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            border: none;
+            background: none;
+            transition: color 0.3s;
+        }
+        .close-btn:hover{
+            color: #333;
+        }
+        .form-group{
+            margin-bottom: 1.5rem;
+        }
+        .form-group label{
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--blue-700);
+            font-weight: 600;
+        }
+        .form-group input, .form-group textarea{
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--blue-400);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus{
+            outline: none;
+            border-color: var(--blue-700);
+        }
+        .form-group textarea{
+            resize: vertical;
+            min-height: 100px;
+        }
+        .submit-btn{
+            width: 100%;
+            background: linear-gradient(135deg,var(--blue-400),var(--blue-700));
+            color: #fff;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .submit-btn:hover{
+            transform: translateY(-2px);
+        }
+        @keyframes fadeIn{
+            from{opacity: 0;}
+            to{opacity: 1;}
+        }
+        @keyframes slideDown{
+            from{transform: translateY(-50px); opacity: 0;}
+            to{transform: translateY(0); opacity: 1;}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Firebase + Firestore (GLOBAL requests + likes + leaderboard) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            getDocs,
+            query,
+            orderBy,
+            serverTimestamp,
+            doc,
+            updateDoc,
+            increment
+        } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyClOeUmq_Dt-9ghRV4LF-HaAO7JRypNIWw",
+            authDomain: "even-better-cc-ported.firebaseapp.com",
+            projectId: "even-better-cc-ported",
+            storageBucket: "even-better-cc-ported.firebasestorage.app",
+            messagingSenderId: "662470608606",
+            appId: "1:662470608606:web:0b8bfbf38f0de6c56ea44f",
+            measurementId: "G-HYYR7S4BK7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const requestsCol = collection(db, "gameRequests");
+
+        function getLikedIds() {
+            try {
+                const raw = localStorage.getItem("likedRequestIds");
+                if (!raw) return new Set();
+                const arr = JSON.parse(raw);
+                if (!Array.isArray(arr)) return new Set();
+                return new Set(arr);
+            } catch (e) {
+                console.error("Error reading likedRequestIds:", e);
+                return new Set();
+            }
+        }
+
+        function saveLikedIds(set) {
+            try {
+                const arr = Array.from(set);
+                localStorage.setItem("likedRequestIds", JSON.stringify(arr));
+            } catch (e) {
+                console.error("Error saving likedRequestIds:", e);
+            }
+        }
+
+        function buildLeaderboard(requests) {
+            const tbody = document.getElementById("leaderboardBody");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            if (!requests.length) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+                cell.colSpan = 3;
+                cell.textContent = "No requests yet.";
+                cell.style.opacity = "0.8";
+                row.appendChild(cell);
+                tbody.appendChild(row);
+                return;
+            }
+
+            const byGame = {};
+            requests.forEach(r => {
+                const game = (r.game || "(Unknown game)").trim();
+                if (!byGame[game]) {
+                    byGame[game] = { game, count: 0, likes: 0 };
+                }
+                byGame[game].count += 1;
+                byGame[game].likes += r.likes || 0;
+            });
+
+            const list = Object.values(byGame);
+            list.sort((a, b) => {
+                if (b.likes !== a.likes) return b.likes - a.likes;
+                return b.count - a.count;
+            });
+
+            const top = list.slice(0, 10);
+
+            top.forEach((item, index) => {
+                const tr = document.createElement("tr");
+
+                const rankTd = document.createElement("td");
+                rankTd.textContent = index + 1;
+
+                const gameTd = document.createElement("td");
+                gameTd.textContent = item.game;
+
+                const statsTd = document.createElement("td");
+                statsTd.textContent = `${item.likes} like${item.likes === 1 ? "" : "s"} • ${item.count} request${item.count === 1 ? "" : "s"}`;
+
+                tr.appendChild(rankTd);
+                tr.appendChild(gameTd);
+                tr.appendChild(statsTd);
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function loadRequests() {
+            const container = document.getElementById("requestsGrid");
+            if (!container) return;
+
+            container.innerHTML = "Loading requests...";
+
+            const likedIds = getLikedIds();
+            const allRequests = [];
+
+            try {
+                const q = query(requestsCol, orderBy("createdAt", "desc"));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    container.innerHTML = "";
+                    const p = document.createElement("p");
+                    p.textContent = "No game requests yet. Be the first to request one!";
+                    p.style.opacity = "0.8";
+                    p.style.fontSize = "0.95rem";
+                    container.appendChild(p);
+                    buildLeaderboard([]);
+                    return;
+                }
+
+                container.innerHTML = "";
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+
+                    const game = data.game || "(Unknown game)";
+                    const name = data.name || "Anonymous";
+                    const reason = data.reason || "No reason provided.";
+                    const likes = data.likes || 0;
+
+                    let dateText = "";
+                    if (data.createdAt && data.createdAt.toDate) {
+                        const d = data.createdAt.toDate();
+                        dateText = d.toLocaleString();
+                    }
+
+                    allRequests.push({
+                        id,
+                        game,
+                        name,
+                        reason,
+                        likes,
+                        createdAt: data.createdAt || null
+                    });
+
+                    const card = document.createElement("div");
+                    card.className = "request-card";
+
+                    const titleEl = document.createElement("p");
+                    titleEl.className = "request-card-title";
+                    titleEl.textContent = game;
+
+                    const metaEl = document.createElement("p");
+                    metaEl.className = "request-card-meta";
+                    metaEl.textContent = dateText
+                        ? `Requested by ${name} • ${dateText}`
+                        : `Requested by ${name}`;
+
+                    const reasonEl = document.createElement("p");
+                    reasonEl.className = "request-card-reason";
+                    reasonEl.textContent = reason;
+
+                    const likeRow = document.createElement("div");
+                    likeRow.className = "like-row";
+
+                    const likeBtn = document.createElement("button");
+                    likeBtn.className = "like-button";
+                    likeBtn.innerHTML = "👍 Like";
+
+                    const countSpan = document.createElement("span");
+                    countSpan.className = "like-count";
+                    countSpan.textContent = likes;
+
+                    if (likedIds.has(id)) {
+                        likeBtn.classList.add("liked");
+                        likeBtn.innerHTML = "👍 Liked";
+                    }
+
+                    likeBtn.addEventListener("click", async () => {
+                        const likedAgain = getLikedIds();
+                        if (likedAgain.has(id)) {
+                            return;
+                        }
+                        try {
+                            const ref = doc(db, "gameRequests", id);
+                            await updateDoc(ref, { likes: increment(1) });
+
+                            likedAgain.add(id);
+                            saveLikedIds(likedAgain);
+
+                            await loadRequests();
+                        } catch (e) {
+                            console.error("Error liking request:", e);
+                            alert("❌ Could not like this request. Try again later.");
+                        }
+                    });
+
+                    likeRow.appendChild(likeBtn);
+                    likeRow.appendChild(countSpan);
+
+                    card.appendChild(titleEl);
+                    card.appendChild(metaEl);
+                    card.appendChild(reasonEl);
+                    card.appendChild(likeRow);
+
+                    container.appendChild(card);
+                });
+
+                buildLeaderboard(allRequests);
+            } catch (err) {
+                console.error("Error loading requests:", err);
+                container.innerHTML = "❌ Error loading requests.";
+                buildLeaderboard([]);
+            }
+        }
+
+        // Expose submitRequest globally so the form's onsubmit can call it
+        window.submitRequest = async function(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const gameName = document.getElementById('gameName').value;
+            const yourName = document.getElementById('yourName').value || 'Anonymous';
+            const reason = document.getElementById('reason').value;
+
+            try {
+                await addDoc(requestsCol, {
+                    game: gameName,
+                    name: yourName,
+                    reason: reason,
+                    likes: 0,
+                    createdAt: serverTimestamp()
+                });
+
+                alert(`You have submitted the form.\n\nGame: "${gameName}"`);
+
+                form.reset();
+                if (typeof window.closeRequestModal === "function") {
+                    window.closeRequestModal();
+                }
+
+                loadRequests();
+            } catch (err) {
+                console.error("Error saving request:", err);
+                alert("❌ There was a problem submitting your request. Try again later.");
+            }
+        };
+
+        window.addEventListener("DOMContentLoaded", loadRequests);
+    </script>
+
+    <div class="container">
+        <div class="header">
+            <div class="badge">The Best CC Ported Link</div>
+            <h1>better cc ported</h1>
+            <p class="lead">This is a game website... have fun!</p>
+        </div>
+
+        <div class="download-section">
+            <h2>Download Website</h2>
+            <p>Get the full website with all games to run offline on your computer</p>
+            <a href="https://github.com/KikiKian/Even-Better-CC-Ported" target="_blank" class="btn">Download from GitHub</a>
+            
+            <div class="instructions">
+                <h3>How to Download & Run Locally:</h3>
+                <ol>
+                    <li>Click the <strong>"Download from GitHub"</strong> button above</li>
+                    <li>On GitHub, click the green <strong>"Code"</strong> button</li>
+                    <li>Click <strong>"Download ZIP"</strong></li>
+                    <li>Extract the ZIP file to a folder on your computer</li>
+                    <li>Double Click <code>home.html</code> to open it</li>
+                    <li>Enjoy playing offline! Plus it's unblockable</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="download-section" style="background: linear-gradient(135deg,#28a745,#20c997); margin-bottom: 3rem;">
+            <h2>Request a Game</h2>
+            <p>Don't see your favorite game? Let us know what you'd like to see!</p>
+            <button onclick="openRequestModal()" class="btn">Request Game</button>
+            <button onclick="scrollToGlobalRequests()" class="btn" style="margin-left: 1rem; background:#f0fff4; color:#1e7e34;">
+                View Global Requests
+            </button>
+        </div>
+
+        <!-- ⭐ TOP REQUESTED GAMES-->
+        <div class="leaderboard-section" id="leaderboard">
+            <div class="leaderboard-header">
+                <div>
+                    <h2 class="leaderboard-title">Top Requested Games</h2>
+                </div>
+                <div class="leaderboard-badge">
+                    🔥 Live community leaderboard
+                </div>
+            </div>
+            <div class="leaderboard-table-wrapper">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Game</th>
+                            <th>Stats</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Filled by buildLeaderboard() -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="games-section">
+            <h2>Available Games</h2>
+            <div class="search-bar">
+                <input type="text" id="gameSearch" placeholder="🔍 Search for games..." onkeyup="searchGames()">
+            </div>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">O</div>
+                    <h3>OVO</h3>
+                    <p>A challenging platformer game with precise controls and fun obstacles. Jump, slide, and master your way through levels!</p>
+                    <a href="games/ovo.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">O+</div>
+                    <h3>OVO++</h3>
+                    <p>An enhanced version of OVO with additional features and improvements. Experience the platformer with new levels and mechanics!</p>
+                    <a href="games/ovo-main/index.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">CC</div>
+                    <h3>Cookie Clicker</h3>
+                    <p>Click cookies, buy upgrades, and build your cookie empire in this addictive idle clicker game!</p>
+                    <a href="games/cookieclicker-gh-pages/cookieclicker-gh-pages/index.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">12</div>
+                    <h3>12 Mini Battles</h3>
+                    <p>Engage in 12 exciting mini battle challenges! Test your skills across multiple game modes and become the ultimate champion!</p>
+                    <a href="games/12minibattles.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">G</div>
+                    <h3>Gladihoppers</h3>
+                    <p>Hop into the arena and battle your way through challenging levels in this exciting platformer!</p>
+                    <a href="games/gh/index.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">BL</div>
+                    <h3>Bitlife</h3>
+                    <p>Go through the ups and downs of life in this interactive life simulation game.</p>
+                    <a href="games/bl/index.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">ASL</div>
+                    <h3>Google</h3>
+                    <p>It's back!!!!! (Requires password for now) Sponsered by the Anti Securly League</p>
+                    <a href="https://takethissecurly.vercel.app" class="btn-play">Visit</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">BTD</div>
+                    <h3>Bloons Tower Defense 4</h3>
+                    <p>Shoot the bloons and defend your territory in this classic tower defense game.</p>
+                    <a href="games/btd/4/index.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">RB</div>
+                    <h3>Retro Bowl</h3>
+                    <p>Lead your football team to victory in this retro-style sports management game!</p>
+                    <a href="games/rb/index.html" class="btn-play">Play Now</a>
+                </div> 
+           
+                <div class="game-card">
+                    <div class="game-icon">MC</div>
+                    <h3>MC 1.8</h3>
+                    <p>Experience the classic Minecraft 1.8 gameplay with friends in this unblocked version.</p>
+                    <a href="games/mc/index.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">FN</div>
+                    <h3>FNAF 1</h3>
+                    <p>Experience the horror of Five Nights at Freddy's 1 in this unblocked version.</p>
+                    <a href="games/fnaf1/index.html" class="btn-play">Play Now</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">LL</div>
+                    <h3>Lunar Lander</h3>
+                    <p>Land your spacecraft safely on the moon in this classic arcade-style physics game!</p>
+                    <a href="games/lunar-lander-master/lunar-lander-master/index.html" class="btn-play">Play Now</a>
+
+
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">R3</div>
+                    <h3>Run 3</h3>
+                    <p>Run through space tunnels and avoid falling in this endless runner game!</p>
+                    <a href="games/run3/run3-main/" class="btn-play">Play Now</a>
+            </div>
+
+                <div class="game-card">
+                    <div class="game-icon">T</div>
+                    <h3>Tetris</h3>
+                    <p></p>
+                    <a href="games/tetris/index.html" class="btn-play">Play Now</a>
+            </div>
+
+                <div class="game-card">
+                    <div class="game-icon">SM</div>
+                    <h3>Super Mario 64</h3>
+                    <p>An odyssey through the Mushroom Kingdom in 3D!</p>
+                    <a href="games/sm64-main/sm64-main/index.html" class="btn-play">Play Now</a>
+            </div>
+
+
+                <div class="game-card">
+                    <div class="game-icon">SF</div>
+                    <h3>Street Fighter (works when games downloaded, fixing)</h3>
+                    <p>A game where you can fight against opponents using various characters and moves.</p>
+                    <a href="games/StreetFighter-main/StreetFighter-main/index.html" class="btn-play">Play Now</a>
+            </div>
+
+                <div class="game-card">
+                    <div class="game-icon">DH</div>
+                    <h3>Drift Hunters</h3>
+                    <p>A game where you can drift and race cars in various environments.</p>
+                    <a href="games/dh/index.html" class="btn-play">Play Now</a>
+            </div>
+        
+                <div class="game-card">
+                    <div class="game-icon">3t</div>
+                    <h3>Three.js Tetris</h3>
+                    <p>A 3D Tetris game.</p>
+                    <a href="games/threejs-tetris-react-main/" class="btn-play">Play Now</a>
+            </div>
+
+                <div class="game-card">
+                    <div class="game-icon">1v1</div>
+                    <h3>1v1.LOL</h3>
+                    <p>A fast-paced building and shooting game where you compete against other players in real-time.</p>
+                    <a href="games/1v1lol/index.html" class="btn-play">Play Now</a>
+            </div>
+
+                <div class="game-card">
+                    <div class="game-icon">DM</div>
+                    <h3>Drive Mad</h3>
+                    <p>A game where you go over obstacles and race against time.</p>
+                    <a href="games/dm/index.html" class="btn-play">Play Now</a>
+            </div>
+
+
+        </div>        
+        <!-- Global requests section -->
+        <div class="requests-section" id="globalRequests">
+            <h2>Global Game Requests</h2>
+            <p class="lead" style="font-size:0.95rem; margin-bottom:1rem;">
+                These are game requests from everyone who has submitted through this website.
+            </p>
+            <div id="requestsGrid" class="requests-grid">
+                <!-- Filled by Firebase loadRequests() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Request Modal -->
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Request a Game</h2>
+                <button class="close-btn" onclick="closeRequestModal()">&times;</button>
+            </div>
+            <form onsubmit="submitRequest(event)">
+                <div class="form-group">
+                    <label for="gameName">Game Name *</label>
+                    <input type="text" id="gameName" placeholder="e.g., Slope, Cookie Clicker" required>
+                </div>
+                <div class="form-group">
+                    <label for="yourName">Your Name (optional)</label>
+                    <input type="text" id="yourName" placeholder="Anonymous">
+                </div>
+                <div class="form-group">
+                    <label for="reason">Why do you want this game? (optional)</label>
+                    <textarea id="reason" placeholder="Tell us why you'd like to see this game added..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit Request</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function searchGames() {
+            const input = document.getElementById('gameSearch');
+            const filter = input.value.toLowerCase();
+            const gameCards = document.querySelectorAll('.game-card');
+            
+            gameCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(filter) || description.includes(filter)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openRequestModal() {
+            document.getElementById('requestModal').style.display = 'block';
+        }
+
+        function closeRequestModal() {
+            document.getElementById('requestModal').style.display = 'none';
+        }
+
+        function scrollToGlobalRequests() {
+            const section = document.getElementById('globalRequests');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('requestModal');
+            if (event.target == modal) {
+                closeRequestModal();
+            }
+        }
+    </script>
+</body>
+</html>
